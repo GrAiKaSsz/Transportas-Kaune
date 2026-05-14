@@ -1,300 +1,691 @@
 <!DOCTYPE html>
+
 <html lang="lt">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Transportas Kaune: vakar, šiandien ir rytoj</title>
+
   <style>
+
     * { box-sizing: border-box; }
+
     body {
+
       margin: 0;
+
       font-family: Arial, Helvetica, sans-serif;
+
       background: radial-gradient(circle at top left, #1d4ed8, #111827 45%, #020617);
+
       color: white;
+
       overflow: hidden;
+
     }
+
     .deck { width: 100vw; height: 100vh; position: relative; }
+
     .slide {
+
       display: none;
+
       width: 100%;
+
       height: 100%;
+
       padding: 55px 70px;
+
       position: absolute;
+
       inset: 0;
+
       animation: fade .35s ease;
+
     }
+
     .slide.active { display: flex; flex-direction: column; justify-content: center; }
-    @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @keyframes fade {
+
+      from { opacity: 0; transform: translateY(10px); }
+
+      to { opacity: 1; transform: translateY(0); }
+
+    }
+
     h1 { font-size: 58px; margin: 0 0 18px; line-height: 1.05; }
+
     h2 { font-size: 42px; margin: 0 0 24px; color: #bfdbfe; }
+
     h3 { font-size: 26px; margin: 0 0 12px; color: #93c5fd; }
+
     p, li { font-size: 25px; line-height: 1.45; }
+
     ul { max-width: 980px; }
+
     .small { font-size: 18px; color: #cbd5e1; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
-    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-    .card {
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.25);
-      backdrop-filter: blur(12px);
-    }
-    .card p, .card li { font-size: 21px; }
-    img {
-      width: 100%;
-      height: 360px;
-      object-fit: cover;
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: 0 25px 70px rgba(0,0,0,.35);
-    }
-    .tag {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: #2563eb;
-      color: white;
-      font-weight: bold;
-      margin-bottom: 18px;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      font-size: 14px;
-    }
-    .controls {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 32px;
+
       align-items: center;
-      gap: 14px;
-      z-index: 99;
+
     }
-    button {
-      border: none;
-      background: rgba(255,255,255,.14);
+
+    .cards {
+
+      display: grid;
+
+      grid-template-columns: repeat(3, 1fr);
+
+      gap: 22px;
+
+    }
+
+    .card {
+
+      background: rgba(255,255,255,.10);
+
+      border: 1px solid rgba(255,255,255,.16);
+
+      border-radius: 24px;
+
+      padding: 24px;
+
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+
+      backdrop-filter: blur(12px);
+
+    }
+
+    .card p, .card li { font-size: 21px; }
+
+    img {
+
+      width: 100%;
+
+      height: 360px;
+
+      object-fit: cover;
+
+      border-radius: 26px;
+
+      border: 1px solid rgba(255,255,255,.16);
+
+      box-shadow: 0 25px 70px rgba(0,0,0,.35);
+
+      background: #0f172a;
+
+    }
+
+    .tag {
+
+      display: inline-block;
+
+      padding: 8px 14px;
+
+      border-radius: 999px;
+
+      background: #2563eb;
+
       color: white;
-      padding: 12px 18px;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: 16px;
-      border: 1px solid rgba(255,255,255,.18);
+
+      font-weight: bold;
+
+      margin-bottom: 18px;
+
+      letter-spacing: .04em;
+
+      text-transform: uppercase;
+
+      font-size: 14px;
+
+      width: fit-content;
+
     }
-    button:hover { background: rgba(255,255,255,.22); }
-    .progress {
+
+    .controls {
+
       position: fixed;
-      top: 0;
-      left: 0;
-      height: 6px;
-      background: #60a5fa;
-      transition: width .25s ease;
-      z-index: 100;
+
+      bottom: 24px;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 14px;
+
+      z-index: 99;
+
     }
-    .number { color: #cbd5e1; font-size: 16px; min-width: 62px; text-align: center; }
+
+    button {
+
+      border: none;
+
+      background: rgba(255,255,255,.14);
+
+      color: white;
+
+      padding: 12px 18px;
+
+      border-radius: 14px;
+
+      cursor: pointer;
+
+      font-size: 16px;
+
+      border: 1px solid rgba(255,255,255,.18);
+
+    }
+
+    button:hover { background: rgba(255,255,255,.22); }
+
+    .progress {
+
+      position: fixed;
+
+      top: 0;
+
+      left: 0;
+
+      height: 6px;
+
+      background: #60a5fa;
+
+      transition: width .25s ease;
+
+      z-index: 100;
+
+    }
+
+    .number {
+
+      color: #cbd5e1;
+
+      font-size: 16px;
+
+      min-width: 62px;
+
+      text-align: center;
+
+    }
+
     .accent { color: #60a5fa; }
-    .quote { font-size: 34px; font-weight: bold; max-width: 1000px; }
-    .sources { font-size: 15px; color: #cbd5e1; line-height: 1.55; }
+
+    .quote {
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+      max-width: 1000px;
+
+    }
+
+    .sources {
+
+      font-size: 15px;
+
+      color: #cbd5e1;
+
+      line-height: 1.55;
+
+    }
+
   </style>
+
 </head>
+
 <body>
+
   <div class="progress" id="progress"></div>
+
   <main class="deck">
+
     <section class="slide active">
+
       <span class="tag">Pamokos pristatymas</span>
+
       <h1>Transportas Kaune:<br><span class="accent">vakar, šiandien ir rytoj</span></h1>
+
       <p>Kaip keitėsi judėjimas mieste ir kokio transporto Kaunui reikės ateityje?</p>
-      <p class="small">Parengė: ____________________ · Klasė: ______ · Data: ______</p>
+
     </section>
 
     <section class="slide">
+
       <h2>Pamokos tema</h2>
+
       <div class="grid">
+
         <div>
+
           <p>Šioje pamokoje aptarsime Kauno transporto raidą nuo senųjų susisiekimo būdų iki šiuolaikinio viešojo transporto ir ateities sprendimų.</p>
+
           <p><b>Pagrindinė mintis:</b> transportas parodo, kaip miestas auga, prisitaiko ir sprendžia taršos, spūsčių bei patogumo problemas.</p>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=1200&q=80" alt="Miesto transportas" />
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Kaunas_bus_station_2023.jpg/1200px-Kaunas_bus_station_2023.jpg" alt="Kauno autobusų stotis" />
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Pamokos tikslas</h2>
+
       <p class="quote">Išsiaiškinti, kaip Kauno transportas keitėsi praeityje, koks jis yra šiandien ir kokios kryptys gali būti svarbios ateityje.</p>
+
     </section>
 
     <section class="slide">
+
       <h2>Pamokos uždaviniai</h2>
+
       <div class="cards">
-        <div class="card"><h3>1. Vakar</h3><p>Prisiminti svarbiausius Kauno transporto istorijos etapus: konkę, autobusus, troleibusus ir funikulierius.</p></div>
-        <div class="card"><h3>2. Šiandien</h3><p>Apibūdinti dabartinį Kauno transportą: autobusus, troleibusus, automobilius, dviračius, paspirtukus.</p></div>
-        <div class="card"><h3>3. Rytoj</h3><p>Įvertinti ateities kryptis: mažesnę taršą, patogesnį viešąjį transportą, išmanesnį judėjimą.</p></div>
+
+        <div class="card">
+
+          <h3>1. Vakar</h3>
+
+          <p>Prisiminti svarbiausius Kauno transporto istorijos etapus: konkę, autobusus, troleibusus ir funikulierius.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>2. Šiandien</h3>
+
+          <p>Apibūdinti dabartinį Kauno transportą: autobusus, troleibusus, automobilius, dviračius, paspirtukus.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>3. Rytoj</h3>
+
+          <p>Įvertinti ateities kryptis: mažesnę taršą, patogesnį viešąjį transportą, išmanesnį judėjimą.</p>
+
+        </div>
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Vakar: kaip Kaune judėjo žmonės?</h2>
+
       <div class="grid">
+
         <div>
+
           <ul>
+
             <li>XIX a. pabaigoje Kaune veikė arklinis tramvajus, vadintas <b>konke</b>.</li>
+
             <li>Vėliau vis svarbesni tapo autobusai.</li>
+
             <li>1930-aisiais Kaune pradėjo veikti funikulieriai – iki šiol išlikęs išskirtinis miesto transporto simbolis.</li>
+
             <li>1965 m. Kaune pradėjo kursuoti troleibusai.</li>
+
           </ul>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1532105956626-9569c03602f6?auto=format&fit=crop&w=1200&q=80" alt="Senas transportas" />
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Kaunas_horse_tram.jpg/1200px-Kaunas_horse_tram.jpg" alt="Kauno konkė – arklinis tramvajus" />
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Įdomus faktas: Kauno funikulieriai</h2>
+
       <div class="grid">
+
         <div>
+
           <p>Kaunas turi du istorinius funikulierius: Žaliakalnio ir Aleksoto.</p>
+
           <p>Jie svarbūs ne tik kaip transportas, bet ir kaip miesto identiteto dalis.</p>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1200&q=80" alt="Kelionė mieste" />
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/%C5%BDaliakalnis_Funicular_Railway%2C_Kaunas%2C_Lithuania.jpg/1200px-%C5%BDaliakalnis_Funicular_Railway%2C_Kaunas%2C_Lithuania.jpg" alt="Žaliakalnio funikulierius Kaune" />
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Šiandien: Kauno transportas</h2>
+
       <div class="cards">
-        <div class="card"><h3>Viešasis transportas</h3><p>Autobusai ir troleibusai jungia miesto rajonus, stotį, centrą, gyvenamuosius mikrorajonus.</p></div>
-        <div class="card"><h3>Automobiliai</h3><p>Patogūs, bet kelia spūsčių, parkavimo ir taršos problemų.</p></div>
-        <div class="card"><h3>Mikromobilumas</h3><p>Dviračiai ir paspirtukai tampa alternatyva trumpoms kelionėms.</p></div>
+
+        <div class="card">
+
+          <h3>Viešasis transportas</h3>
+
+          <p>Autobusai ir troleibusai jungia miesto rajonus, stotį, centrą, gyvenamuosius mikrorajonus.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>Automobiliai</h3>
+
+          <p>Patogūs, bet kelia spūsčių, parkavimo ir taršos problemų.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>Mikromobilumas</h3>
+
+          <p>Dviračiai ir paspirtukai tampa alternatyva trumpoms kelionėms.</p>
+
+        </div>
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Viešasis transportas šiandien</h2>
+
       <div class="grid">
+
         <div>
+
           <ul>
+
             <li>Kaune kursuoja miesto autobusai ir troleibusai.</li>
+
             <li>Maršrutus galima tikrinti per „stops.lt“.</li>
+
             <li>Į oro uostą kursuoja 29G autobusas.</li>
+
             <li>Viešasis transportas svarbus mokiniams, studentams, senjorams ir visiems, kurie nenori kasdien važiuoti automobiliu.</li>
+
           </ul>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1200&q=80" alt="Autobusas mieste" />
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Kaunas_trolleybus_15.jpg/1200px-Kaunas_trolleybus_15.jpg" alt="Kauno troleibusas" />
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Automobiliai Kaune: patogu, bet ne visada efektyvu</h2>
+
       <div class="grid">
+
         <div>
+
           <p>Automobilis suteikia laisvę, tačiau mieste sukuria tris problemas:</p>
+
           <ul>
+
             <li>spūstis piko metu;</li>
+
             <li>parkavimo vietų trūkumą;</li>
+
             <li>oro taršą ir triukšmą.</li>
+
           </ul>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Automobilis" />
+
+        <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80" alt="Automobiliai miesto gatvėje" />
+
       </div>
+
     </section>
 
     <section class="slide">
+
       <h2>Kauno senamiestis ir taršos mažinimas</h2>
-      <p>Kaune įvesta mažos taršos / sumažintos taršos zona, kurios tikslas – mažinti nereikalingą tranzitą per senamiestį.</p>
-      <p>Tai rodo, kad miesto transportas nebėra vien tik „kaip greičiau nuvažiuoti“, bet ir „kaip važiuoti atsakingiau“.</p>
-    </section>
 
-    <section class="slide">
-      <h2>Rytoj: kokio transporto Kaunui reikės?</h2>
-      <div class="cards">
-        <div class="card"><h3>Švaresnio</h3><p>Daugiau elektrinių ar hibridinių autobusų, mažiau taršių kelionių automobiliu.</p></div>
-        <div class="card"><h3>Patogesnio</h3><p>Dažnesni maršrutai, aiškesni persėdimai, greitesnės kelionės.</p></div>
-        <div class="card"><h3>Išmanesnio</h3><p>Programėlės, realaus laiko tvarkaraščiai, duomenimis valdomas eismas.</p></div>
-      </div>
-    </section>
-
-    <section class="slide">
-      <h2>Ateities idėjos Kaunui</h2>
       <div class="grid">
+
         <div>
-          <ul>
-            <li>Daugiau saugių dviračių takų.</li>
-            <li>Parkavimo aikštelės miesto pakraščiuose.</li>
-            <li>Greitesnis viešasis transportas pagrindinėse gatvėse.</li>
-            <li>Daugiau įkrovimo vietų elektromobiliams.</li>
-            <li>Senamiesčio apsauga nuo perteklinio automobilių srauto.</li>
-          </ul>
+
+          <p>Kaune įvesta mažos taršos / sumažintos taršos zona, kurios tikslas – mažinti nereikalingą tranzitą per senamiestį.</p>
+
+          <p>Tai rodo, kad miesto transportas nebėra vien tik „kaip greičiau nuvažiuoti“, bet ir „kaip važiuoti atsakingiau“.</p>
+
         </div>
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80" alt="Ateities transportas" />
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Kaunas_old_town_2023.jpg/1200px-Kaunas_old_town_2023.jpg" alt="Kauno senamiestis" />
+
       </div>
+
     </section>
 
     <section class="slide">
-      <h2>Klasės veikla / diskusija</h2>
-      <p><b>Klausimas:</b> ką pasirinktum kelionei į mokyklą ar centrą – automobilį, autobusą, troleibusą, dviratį ar paspirtuką?</p>
+
+      <h2>Rytoj: kokio transporto Kaunui reikės?</h2>
+
       <div class="cards">
-        <div class="card"><h3>1 grupė</h3><p>Įvardija pasirinkto transporto privalumus.</p></div>
-        <div class="card"><h3>2 grupė</h3><p>Įvardija trūkumus ir problemas.</p></div>
-        <div class="card"><h3>3 grupė</h3><p>Pasiūlo, kaip tą transportą pagerinti Kaune.</p></div>
+
+        <div class="card">
+
+          <h3>Švaresnio</h3>
+
+          <p>Daugiau elektrinių ar hibridinių autobusų, mažiau taršių kelionių automobiliu.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>Patogesnio</h3>
+
+          <p>Dažnesni maršrutai, aiškesni persėdimai, greitesnės kelionės.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>Išmanesnio</h3>
+
+          <p>Programėlės, realaus laiko tvarkaraščiai, duomenimis valdomas eismas.</p>
+
+        </div>
+
       </div>
+
     </section>
 
     <section class="slide">
+
+      <h2>Ateities idėjos Kaunui</h2>
+
+      <div class="grid">
+
+        <div>
+
+          <ul>
+
+            <li>Daugiau saugių dviračių takų.</li>
+
+            <li>Parkavimo aikštelės miesto pakraščiuose.</li>
+
+            <li>Greitesnis viešasis transportas pagrindinėse gatvėse.</li>
+
+            <li>Daugiau įkrovimo vietų elektromobiliams.</li>
+
+            <li>Senamiesčio apsauga nuo perteklinio automobilių srauto.</li>
+
+          </ul>
+
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1200&q=80" alt="Dviračiai ir švaresnis miesto transportas" />
+
+      </div>
+
+    </section>
+
+    <section class="slide">
+
+      <h2>Klasės veikla / diskusija</h2>
+
+      <p><b>Klausimas:</b> ką pasirinktum kelionei į mokyklą ar centrą – automobilį, autobusą, troleibusą, dviratį ar paspirtuką?</p>
+
+      <div class="cards">
+
+        <div class="card">
+
+          <h3>1 grupė</h3>
+
+          <p>Įvardija pasirinkto transporto privalumus.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>2 grupė</h3>
+
+          <p>Įvardija trūkumus ir problemas.</p>
+
+        </div>
+
+        <div class="card">
+
+          <h3>3 grupė</h3>
+
+          <p>Pasiūlo, kaip tą transportą pagerinti Kaune.</p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="slide">
+
       <h2>Apibendrinimas</h2>
+
       <ul>
+
         <li><b>Vakar</b> Kauno transportas prasidėjo nuo paprastesnių, lėtesnių susisiekimo būdų.</li>
+
         <li><b>Šiandien</b> mieste veikia autobusai, troleibusai, automobiliai, dviračiai ir paspirtukai.</li>
+
         <li><b>Rytoj</b> svarbiausia bus mažesnė tarša, patogumas ir išmanūs sprendimai.</li>
+
       </ul>
+
     </section>
 
     <section class="slide">
+
       <h2>Šaltiniai</h2>
+
       <p class="sources">
+
         Kauno viešojo transporto maršrutai: stops.lt/kaunas<br>
+
         Kauno oro uosto informacija apie 29G autobusą<br>
+
         Kauno miesto savivaldybės informacija apie sumažintos taršos zoną<br>
+
         EU Urban Mobility Observatory informacija apie Kauno mažos taršos zoną<br>
-        Transporto istorijos informacija apie konkę, autobusus ir troleibusus
+
+        Wikimedia Commons ir Unsplash nuotraukos
+
       </p>
+
     </section>
+
   </main>
 
   <div class="controls">
+
     <button onclick="prevSlide()">← Atgal</button>
+
     <span class="number" id="counter"></span>
+
     <button onclick="nextSlide()">Toliau →</button>
+
   </div>
 
   <script>
+
     const slides = document.querySelectorAll('.slide');
+
     const counter = document.getElementById('counter');
+
     const progress = document.getElementById('progress');
+
     let current = 0;
 
     function showSlide(index) {
+
       slides.forEach(slide => slide.classList.remove('active'));
+
       slides[index].classList.add('active');
+
       counter.textContent = `${index + 1} / ${slides.length}`;
+
       progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+
     }
 
     function nextSlide() {
+
       current = (current + 1) % slides.length;
+
       showSlide(current);
+
     }
 
     function prevSlide() {
+
       current = (current - 1 + slides.length) % slides.length;
+
       showSlide(current);
+
     }
 
     document.addEventListener('keydown', (e) => {
+
       if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+
       if (e.key === 'ArrowLeft') prevSlide();
+
     });
 
     showSlide(current);
+
   </script>
+
 </body>
+
 </html>
